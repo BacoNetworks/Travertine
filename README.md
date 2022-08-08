@@ -45,5 +45,7 @@ Special Thanks To
 
 [YourKit](https://yourkit.com/), makers of the outstanding Java profiler, supports open source projects of all kinds with their full-featured [Java](https://yourkit.com/features/) and [.NET](https://yourkit.com/dotnet/features/) application profilers. We thank them for granting Travertine an OSS license so that we can make our software the best it can be.
 
+Additional information
+-----------------
 To get the project, you run ./travertine patch.  To get a build, it's ./travertine build.  To build patches based on your code commits to the currently patched project, you run ./travertine rebuild.
 The actual project in it's completed state will appear in the folder Travertine-Proxy.
