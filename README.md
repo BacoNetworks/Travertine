@@ -47,5 +47,6 @@ Special Thanks To
 
 Additional information
 -----------------
+Edit Travertine-Proxy and when you're ready move to that directory and do git add . and git commit -m "your message". Then move back to base dir and do ./travertine rb. Move info below
 To get the project, you run ./travertine patch.  To get a build, it's ./travertine build.  To build patches based on your code commits to the currently patched project, you run ./travertine rebuild.
 The actual project in it's completed state will appear in the folder Travertine-Proxy.

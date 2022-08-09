@@ -1,0 +1,78 @@
+From b1ec0615cbfab935b465ba40dde1ccf54065e785 Mon Sep 17 00:00:00 2001
+From: kristi71111 <kristjan.gorinek20@gmail.com>
+Date: Tue, 9 Aug 2022 22:27:25 +0200
+Subject: [PATCH] Remove logs that are annoying
+
+
+diff --git a/proxy/src/main/java/net/md_5/bungee/connection/InitialHandler.java b/proxy/src/main/java/net/md_5/bungee/connection/InitialHandler.java
+index ca0b023f..320705d0 100644
+--- a/proxy/src/main/java/net/md_5/bungee/connection/InitialHandler.java
++++ b/proxy/src/main/java/net/md_5/bungee/connection/InitialHandler.java
+@@ -375,10 +375,11 @@ public class InitialHandler extends PacketHandler implements PendingConnection
+                 break;
+             case 2:
+                 // Login
++               /*
+                 if (BungeeCord.getInstance().getConfig().isLogInitialHandlerConnections() ) // Waterfall
+                 {
+                     bungee.getLogger().log( Level.INFO, "{0} has connected", this );
+-                }
++                }*/
+                 thisState = State.USERNAME;
+                 ch.setProtocol( Protocol.LOGIN );
+ 
+@@ -403,6 +404,10 @@ public class InitialHandler extends PacketHandler implements PendingConnection
+     public void handle(LoginRequest loginRequest) throws Exception
+     {
+         Preconditions.checkState( thisState == State.USERNAME, "Not expecting USERNAME" );
++        if(thisState != State.USERNAME){
++            disconnect( "Yeah no let's not do that :)");
++            return;
++        }
+ 
+         if ( !AllowedCharacters.isValidName( loginRequest.getData(), onlineMode ) )
+         {
+diff --git a/proxy/src/main/java/net/md_5/bungee/netty/HandlerBoss.java b/proxy/src/main/java/net/md_5/bungee/netty/HandlerBoss.java
+index 29cf4b4f..76e95b43 100644
+--- a/proxy/src/main/java/net/md_5/bungee/netty/HandlerBoss.java
++++ b/proxy/src/main/java/net/md_5/bungee/netty/HandlerBoss.java
+@@ -139,7 +139,9 @@ public class HandlerBoss extends ChannelInboundHandlerAdapter
+             {
+                 if ( cause instanceof ReadTimeoutException )
+                 {
+-                    ProxyServer.getInstance().getLogger().log( Level.WARNING, "{0} - read timed out", handler );
++                    //ProxyServer.getInstance().getLogger().log( Level.WARNING, "{0} - read timed out", handler );
++                    ctx.close();
++                    return;
+                 } else if ( cause instanceof DecoderException )
+                 {
+                     // Waterfall start
+@@ -158,10 +160,10 @@ public class HandlerBoss extends ChannelInboundHandlerAdapter
+                         } );
+                     } else if ( cause.getCause() instanceof BadPacketException )
+                     {
+-                        ProxyServer.getInstance().getLogger().log( Level.WARNING, "{0} - bad packet, are mods in use!? {1}", new Object[]
++                        /*ProxyServer.getInstance().getLogger().log( Level.WARNING, "{0} - bad packet, are mods in use!? {1}", new Object[]
+                         {
+                             handler, cause.getCause().getMessage()
+-                        } );
++                        } );*/
+                     } else if ( cause.getCause() instanceof OverflowPacketException )
+                     {
+                         ProxyServer.getInstance().getLogger().log( Level.WARNING, "{0} - overflow in packet detected! {1}", new Object[]
+diff --git a/query/src/main/java/net/md_5/bungee/query/QueryHandler.java b/query/src/main/java/net/md_5/bungee/query/QueryHandler.java
+index 0c1ecfb8..324111a8 100644
+--- a/query/src/main/java/net/md_5/bungee/query/QueryHandler.java
++++ b/query/src/main/java/net/md_5/bungee/query/QueryHandler.java
+@@ -70,7 +70,7 @@ public class QueryHandler extends SimpleChannelInboundHandler<DatagramPacket>
+         ByteBuf in = msg.content();
+         if ( in.readUnsignedByte() != 0xFE || in.readUnsignedByte() != 0xFD )
+         {
+-            bungee.getLogger().log( Level.WARNING, "Query - Incorrect magic!: {0}", msg.sender() );
++            //bungee.getLogger().log( Level.WARNING, "Query - Incorrect magic!: {0}", msg.sender() );
+             return;
+         }
+ 
+-- 
+2.22.0.windows.1
+
